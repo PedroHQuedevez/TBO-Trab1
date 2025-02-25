@@ -5,6 +5,45 @@
 #include "vector.h"
 #include <limits.h>
 
+// Função auxiliar para trocar dois elementos no array
+void swap(int *a, int *b)
+{
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// Função auxiliar para particionar o array
+int partition(int indices[], Vector *distances, int low, int high)
+{
+    float *pivot = (float *)vector_get(distances, indices[high]);
+    int i = (low - 1);
+
+    for (int j = low; j <= high - 1; j++)
+    {
+        float *dist_j = (float *)vector_get(distances, indices[j]);
+        if (*dist_j < *pivot || (*dist_j == *pivot && indices[j] < indices[high]))
+        {
+            i++;
+            swap(&indices[i], &indices[j]);
+        }
+    }
+    swap(&indices[i + 1], &indices[high]);
+    return (i + 1);
+}
+
+// Função QuickSort
+void quickSort(int indices[], Vector *distances, int low, int high)
+{
+    if (low < high)
+    {
+        int pi = partition(indices, distances, low, high);
+
+        quickSort(indices, distances, low, pi - 1);
+        quickSort(indices, distances, pi + 1, high);
+    }
+}
+
 Vector *visited_nodes_vector_init(int size, char *source_node_id)
 {
     Vector *visited_nodes = vector_construct();
@@ -133,24 +172,8 @@ void print_shortest_paths(Vector *distances, Vector *parents, char *source_node_
         indices[i] = i;
     }
 
-    // Ordenar os índices com base nas distâncias e, em caso de empate, pelo índice do nó;
-    // utiliza esse indice para a ordem de print dos caminhos, utilizando o vetor de parents;
-    for (int i = 0; i < num_nodes - 1; i++)
-    {
-        for (int j = i + 1; j < num_nodes; j++)
-        {
-            float *dist_i = (float *)vector_get(distances, indices[i]);
-            float *dist_j = (float *)vector_get(distances, indices[j]);
-
-            // Se as distâncias forem iguais, comparar os índices dos nós
-            if (*dist_j < *dist_i || (*dist_j == *dist_i && indices[j] < indices[i]))
-            {
-                int temp = indices[i];
-                indices[i] = indices[j];
-                indices[j] = temp;
-            }
-        }
-    }
+    // Ordenar os índices com base nas distâncias e, em caso de empate, pelo índice do nó
+    quickSort(indices, distances, 0, num_nodes - 1);
 
     // Escrever os caminhos mínimos no arquivo
     for (int i = 0; i < num_nodes; i++)
@@ -166,7 +189,7 @@ void print_shortest_paths(Vector *distances, Vector *parents, char *source_node_
         // Garantir que o nó de origem apareça como 'node_X <- node_X'
         if (current == atoi(&source_node_id[5]))
         {
-            path_length += sprintf(path + path_length, "node_%d <- node_%d", current, current);
+            path_length += sprintf(path + path_length, "node_%d <- node_%d ", current, current);
         }
         else
         {
