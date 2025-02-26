@@ -131,9 +131,13 @@ void add_conexions_heap_min(Vector *heap_min, vector_node *node)
         conexao *c = (conexao *)vector_get(conexoes, i);
 
         if (get_weight(c) == 0)
+        {
             continue;
-
-        heap_push(heap_min, c);
+        }
+        else
+        {
+            heap_push(heap_min, c);
+        }
     }
 }
 
@@ -255,7 +259,7 @@ void dijkstra(Vector *nodes, char *source_node_id, char *path_saida)
             float distance_dest = *(float *)vector_get(distances, dest_index);
             float new_distance = distance_origin + weight;
 
-            if (new_distance < distance_dest)
+            if (new_distance < distance_dest && *(int *)vector_get(visited_nodes, dest_index) == 0)
             {
                 att_distances(distances, dest_index, new_distance);
                 att_parents(parents, dest_index, origin_index);

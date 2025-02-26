@@ -95,11 +95,11 @@ void heapfy_down(Vector *heap_min, int i)
     int left = 2 * i + 1;
     int right = 2 * i + 2;
     int idx = i;
-
-    if (left < return_size(heap_min) && ((conexao *)vector_get(heap_min, left))->weight > ((conexao *)vector_get(heap_min, idx))->weight)
+    // comparação utilizando >= para manter a estabilidade entre chaves iguais;
+    if (left < return_size(heap_min) && ((conexao *)vector_get(heap_min, left))->weight >= ((conexao *)vector_get(heap_min, idx))->weight)
         idx = left;
 
-    if (right < return_size(heap_min) && ((conexao *)vector_get(heap_min, right))->weight > ((conexao *)vector_get(heap_min, idx))->weight)
+    if (right < return_size(heap_min) && ((conexao *)vector_get(heap_min, right))->weight >= ((conexao *)vector_get(heap_min, idx))->weight)
         idx = right;
 
     if (idx != i)
