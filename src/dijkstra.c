@@ -3,6 +3,7 @@
 #include <string.h>
 #include "heap.h"
 #include "vector.h"
+#include "conexao.h"
 #include <limits.h>
 
 // Função auxiliar para trocar dois elementos no array
@@ -247,7 +248,7 @@ void dijkstra(Vector *nodes, char *source_node_id, char *path_saida)
         {
             conexao *c = heap_pop(heap_min);
 
-            char *origin = get_conexao_origen(c);
+            char *origin = get_conexao_origem(c);
             int origin_index = atoi(&origin[5]);
 
             char *dest = get_conexao_dest(c);

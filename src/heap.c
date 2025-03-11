@@ -2,19 +2,13 @@
 #include <stdio.h>
 #include <string.h>
 #include "heap.h"
+#include "conexao.h"
 
 typedef struct vector_node
 {
     char node_id[50];
     Vector *conexoes;
 } vector_node;
-
-typedef struct conexao
-{
-    char Origen[50];
-    char Dest[50];
-    float weight;
-} conexao;
 
 int return_size_conexoes(vector_node *v)
 {
@@ -34,26 +28,6 @@ Vector *get_vector_conexoes(vector_node *v)
 conexao *get_conexao(vector_node *v, int i)
 {
     return (conexao *)vector_get(v->conexoes, i);
-}
-
-char *get_conexao_origen(conexao *c)
-{
-    return c->Origen;
-}
-
-char *get_conexao_dest(conexao *c)
-{
-    return c->Dest;
-}
-
-float get_weight(conexao *c)
-{
-    return c->weight;
-}
-
-void conexao_destroy(conexao *c)
-{
-    free(c);
 }
 
 void vector_node_destroy(vector_node *vn)
@@ -78,16 +52,6 @@ vector_node *vector_node_construct(char *node_id, Vector *conexoes)
     strcpy(vn->node_id, node_id);
     vn->conexoes = conexoes;
     return vn;
-}
-
-conexao *conexao_construct(char *Origen, char *Dest, char *weight)
-{
-    conexao *c = (conexao *)calloc(1, sizeof(conexao));
-    strcpy(c->Origen, Origen);
-    strcpy(c->Dest, Dest);
-    float weight_f = atof(weight);
-    c->weight = weight_f;
-    return c;
 }
 
 void heapfy_down(Vector *heap_min, int i)
@@ -150,7 +114,7 @@ void print_node(vector_node *node)
     for (int i = 0; i < return_size(node->conexoes); i++)
     {
         conexao *c = (conexao *)vector_get(node->conexoes, i);
-        printf("%s -> %s - %.2f \n", c->Origen, c->Dest, c->weight);
+        printf("%s -> %s - %.2f \n", c->origem, c->dest, c->weight);
     }
     printf("\n");
 }
