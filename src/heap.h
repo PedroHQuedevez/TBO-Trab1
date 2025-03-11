@@ -2,6 +2,7 @@
 #define _HEAP_H
 
 #include "vector.h"
+#include "conexao.h"
 
 typedef struct vector_node vector_node;
 typedef struct conexao conexao;
