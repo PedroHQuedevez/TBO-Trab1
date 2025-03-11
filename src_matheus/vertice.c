@@ -55,7 +55,7 @@ void vertice_destroy(Vertice *v)
         aresta_destroy(vector_get(v->arestas, i));
     }
 
-    // destroi o vetor
+    // destroi o vetor de arestas
     vector_destroy(v->arestas);
 
     free(v);

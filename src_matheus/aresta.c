@@ -16,12 +16,12 @@ int aresta_get_origem(Aresta *a)
     return a->origem;
 }
 
-int aresta_get_dest(Aresta *a)
+int aresta_get_destino(Aresta *a)
 {
     return a->destino;
 }
 
-float aresta_get_weight(Aresta *a)
+float aresta_get_peso(Aresta *a)
 {
     return a->peso;
 }

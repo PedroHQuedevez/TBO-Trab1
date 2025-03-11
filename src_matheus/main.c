@@ -1,14 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
+#include "aresta.h"
+#include "dijkstra.h"
 #include "vector.h"
+#include "vertice.h"
 
 int main(int argc, char *argv[])
 {
-    if (argc != 2)
+    if (argc < 3)
     {
-        printf("Error: needs exactly one argument.\n");
+        printf("Error: precisa de um arquivo de entrada e um arquivo de saída.\n");
         exit(0);
     }
 
@@ -19,72 +21,67 @@ int main(int argc, char *argv[])
         exit(0);
     }
 
-    char *line = NULL;
-    size_t len = 0;
-    ssize_t read;
-
-    read = getline(&line, &len, archive);
-
-    char source_node[20];
-    strcpy(source_node, line);
+    int source;
+    fscanf(archive, "node_%d\n", &source);
 
     // Vetor principal contendo vertices para que seja possivel
     // acessar em tempo O(1) as informações de um dado vértice
     Vector *vertices = vector_construct();
 
-    // Heap principal contendo os nós não visitados
-    Heap *nao_visitados = heap_construct();
-
+    // váriaveis buffer e de contagem
     Vertice *v;
     Aresta *a;
 
-    while ((read = getline(&line, &len, archive)) != -1)
+    int origem;
+    int destino;
+    char peso_str[100];
+    float peso;
+
+    char c;
+
+    while (fscanf(archive, "node_%d", &origem) == 1)
     {
-        char *token = strtok(line, ",");
-        char *node_id = token;
+        v = vertice_construct(origem);
+        if (origem == source) vertice_set_distancia_origem(v, 0.0);
+        vector_push_back(vertices, v);
 
-        token = strtok(NULL, ",");
-
-        int count = 0;
-        while (token != NULL)
+        destino = 0;
+        while (1)
         {
-            // printf("%s ", token);
+            fscanf(archive, "%c", &c);
+            if (c == '\n') break;
 
-            char *origem = node_id;
+            if (destino == origem) destino++;
 
-            // no caso de exemplo node 3, a terceira coluna da entrada representaria a conexão com o node 4
-            // aqui nós colocamos uma conexão extra de 3 com 3 de valor 0, para manter as entradas consistentes com os vetores
-            // que serão criados depois;
-            int origem_idx = atoi(&node_id[5]);
-            v = vertice_construct(origem_idx);
+            fscanf(archive, " %99[^,\n]", peso_str);
+            peso = atof(peso_str);
 
-            if (origem_idx == count)
+            if (peso > 0)
             {
-                char *peso_aux = "0";
-                char destino_aux[50];
-                sprintf(destino_aux, "node_%i", count);
-
-                a = aresta_construct(atoi(origem), atoi(destino_aux), atoi(peso_aux));
-
+                a = aresta_construct(origem, destino, peso);
                 vertice_add_aresta(v, a);
-                count++;
             }
 
-            char destino[50];
-            sprintf(destino, "node_%i", count);
-
-            char *peso = token;
-            token = strtok(NULL, ",");
-
-            conexao *c = conexao_construct(origem, destino, peso);
-            vector_push_back(heap_min, c);
-            count++;
+            destino++;
         }
-        vector_node *vn = vector_node_construct(node_id, heap_min);
-        vector_push_back(nodes, vn);
     }
 
     fclose(archive);
+
+    dijkstra(vertices, source);
+    for (int i = 0; i < vector_size(vertices); i++)
+    {
+        v = (Vertice *)vector_get(vertices, i);
+        printf("id: %d pai: %d dist_source: %.2f\n", vertice_get_id(v), vertice_get_id_pai(v), vertice_get_distancia_origem(v));
+    }
+
+    // destroy
+    for (int i = 0; i < vector_size(vertices); i++)
+    {
+        v = (Vertice *)vector_get(vertices, i);
+        vertice_destroy(v);
+    }
+    vector_destroy(vertices);
 
     return 0;
 }

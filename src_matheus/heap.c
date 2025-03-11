@@ -9,7 +9,18 @@ Heap *heap_construct()
     return h;
 }
 
-void heapfy_down(Heap *h, int i)
+int heap_size(Heap *h)
+{
+    return vector_size(h->vertices);
+}
+
+int heap_find(Heap *h, Vertice *v) {
+    int idx = vector_find(h->vertices, v);
+    if (idx >= vector_size(h->vertices)) return -1;
+    return idx;
+}
+
+void heapify_down(Heap *h, int i)
 {
     int left = 2 * i + 1;
     int right = 2 * i + 2;
@@ -24,24 +35,24 @@ void heapfy_down(Heap *h, int i)
     if (idx != i)
     {
         vector_swap(h->vertices, i, idx);
-        heapfy_down(h, idx);
+        heapify_down(h, idx);
     }
 }
 
-void heapfy_up(Heap *h, int idx)
+void heapify_up(Heap *h, int idx)
 {
     int parent_idx = (idx - 1) / 2;
     if (parent_idx >= 0 && ((Vertice *)vector_get(h->vertices, idx))->distancia_origem < ((Vertice *)vector_get(h->vertices, parent_idx))->distancia_origem)
     {
         vector_swap(h->vertices, idx, parent_idx);
-        heapfy_up(h, parent_idx);
+        heapify_up(h, parent_idx);
     }
 }
 
 void heap_push(Heap *h, Vertice *v)
 {
     vector_push_back(h->vertices, v);
-    heapfy_up(h, return_size(h->vertices) - 1);
+    heapify_up(h, return_size(h->vertices) - 1);
 }
 
 Vertice *heap_pop(Heap *h)
@@ -53,10 +64,11 @@ Vertice *heap_pop(Heap *h)
         return v;
     }
     vector_set(h->vertices, 0, vector_pop_back(h->vertices));
-    heapfy_down(h, 0);
+    heapify_down(h, 0);
     return v;
 }
 
 void heap_destroy(Heap *h) {
     vector_destroy(h->vertices);
+    free(h);
 }
