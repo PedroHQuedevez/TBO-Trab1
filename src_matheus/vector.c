@@ -12,11 +12,6 @@ typedef struct Vector
     int allocated;
 } Vector;
 
-int return_size(Vector *v)
-{
-    return v->size;
-}
-
 int return_allocated(Vector *v)
 {
     return v->allocated;

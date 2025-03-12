@@ -48,13 +48,14 @@ int main(int argc, char *argv[])
         destino = 0;
         while (1)
         {
-            fscanf(archive, "%c", &c);
+            if (fscanf(archive, "%c", &c) != 1) break;
             if (c == '\n') break;
 
             if (destino == origem) destino++;
 
             fscanf(archive, " %99[^,\n]", peso_str);
             peso = atof(peso_str);
+            // printf("%d %d %.2f\n", origem, destino, peso); // debug
 
             if (peso > 0)
             {
@@ -66,6 +67,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    printf("eof\n"); // debug
     fclose(archive);
 
     dijkstra(vertices, source);

@@ -4,7 +4,6 @@
 typedef void *data_type;
 typedef struct Vector Vector;
 
-int return_size(Vector *v);
 int return_allocated(Vector *v);
 Vector *vector_construct();
 int vector_size(Vector *v);
