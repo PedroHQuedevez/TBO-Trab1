@@ -4,7 +4,8 @@
 #include "vector.h"
 #include "vertice.h"
 
-typedef struct Heap {
+typedef struct Heap
+{
     Vector *vertices;
 } Heap;
 

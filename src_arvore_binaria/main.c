@@ -59,7 +59,6 @@ int main(int argc, char *argv[])
 
             fscanf(archive, " %99[^,\n]", peso_str);
             peso = atof(peso_str);
-            // printf("%d %d %.2f\n", origem, destino, peso); // debug
 
             if (peso > 0)
             {
@@ -84,12 +83,6 @@ int main(int argc, char *argv[])
         vector_push_back(ordenado, (Vertice *)vector_get(vertices, i));
     }
     vector_qsort(ordenado, cmp_vertice);
-
-    // for (int i = 0; i < vector_size(vertices); i++) // debug
-    // {
-    //     v = (Vertice *)vector_get(vertices, i);
-    //     printf("id: %d pai: %d dist_source: %.2f\n", vertice_get_id(v), vertice_get_id_pai(v), vertice_get_distancia_origem(v));
-    // }
 
     // imprime os vertices
     int id_pai;
