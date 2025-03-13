@@ -158,3 +158,8 @@ void vector_clear(Vector *v)
 {
     v->size = 0;
 }
+
+void vector_qsort(Vector *v, int (cmp)(const void *, const void *))
+{
+    qsort(v->data, v->size, sizeof(void *), cmp);
+}

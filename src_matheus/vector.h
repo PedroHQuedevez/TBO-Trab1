@@ -18,5 +18,6 @@ void vector_insert(Vector *v, int i, data_type val);
 void vector_swap(Vector *v, int i, int j);
 void vector_destroy(Vector *v);
 void vector_clear(Vector *v);
+void vector_qsort(Vector *v, int (cmp)(const void *, const void *));
 
 #endif

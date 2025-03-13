@@ -15,17 +15,17 @@ void dijkstra(Vector *vertices, int source)
     Aresta *a;
     int idx;
 
-    int count_debug = 0; // debug
-    Vector *visitados = vector_construct(); // debug
+    // int count_debug = 0; // debug
+    // Vector *visitados = vector_construct(); // debug
     while (heap_size(nao_visitados) > 0)
     {
         origem = heap_pop(nao_visitados);
         arestas = vertice_get_arestas(origem);
 
-        if (vector_find(visitados, origem) == -1) vector_push_back(visitados, origem); // debug
-        else printf("%p já foi visitado\n", origem);
-        count_debug += 1; // debug
-        printf("%d %d %d\n", count_debug, heap_size(nao_visitados), vector_size(visitados)); // debug
+        // if (vector_find(visitados, origem) == -1) vector_push_back(visitados, origem); // debug
+        // else printf("%p já foi visitado\n", origem);
+        // count_debug += 1; // debug
+        // printf("%d %d %d\n", count_debug, heap_size(nao_visitados), vector_size(visitados)); // debug
 
         for (int i = 0; i < vector_size(arestas); i++) {
             a = (Aresta *)vector_get(arestas, i);
@@ -33,12 +33,12 @@ void dijkstra(Vector *vertices, int source)
             destino = (Vertice *)vector_get(vertices, aresta_get_destino(a));
             peso = aresta_get_peso(a);
 
-            int find = vector_find(visitados, destino) != -1; // debug
+            // int find = vector_find(visitados, destino) != -1; // debug
             // if (find) printf("%.2f + %.2f = %.2f || %.2f\n", vertice_get_distancia_origem(origem), peso, vertice_get_distancia_origem(origem) + peso, vertice_get_distancia_origem(destino)); // debug
 
             if (vertice_get_distancia_origem(origem) + peso < vertice_get_distancia_origem(destino))
             {
-                if (find) printf("^^^^^^^^^\n"); // debug
+                // if (find) printf("^^^^^^^^^\n"); // debug
 
                 vertice_set_id_pai(destino, vertice_get_id(origem));
                 vertice_set_distancia_origem(destino, vertice_get_distancia_origem(origem) + peso);

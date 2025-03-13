@@ -60,3 +60,12 @@ void vertice_destroy(Vertice *v)
 
     free(v);
 }
+
+int cmp_vertice(const void *a, const void *b)
+{
+    Vertice *va = (Vertice *)*(void **)a;
+    Vertice *vb = (Vertice *)*(void **)b;
+
+    if (va->distancia_origem < vb->distancia_origem) return -1;
+    return 1;
+}

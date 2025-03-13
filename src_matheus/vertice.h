@@ -21,5 +21,6 @@ void vertice_set_distancia_origem(Vertice *v, float distancia_origem);
 Vector *vertice_get_arestas(Vertice *v);
 void vertice_add_aresta(Vertice *v, Aresta *a);
 void vertice_destroy(Vertice *v);
+int cmp_vertice(const void *a, const void *b);
 
 #endif

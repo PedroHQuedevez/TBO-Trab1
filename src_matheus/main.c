@@ -42,7 +42,11 @@ int main(int argc, char *argv[])
     while (fscanf(archive, "node_%d", &origem) == 1)
     {
         v = vertice_construct(origem);
-        if (origem == source) vertice_set_distancia_origem(v, 0.0);
+        if (origem == source)
+        {
+            vertice_set_id_pai(v, 0);
+            vertice_set_distancia_origem(v, 0.0);
+        }
         vector_push_back(vertices, v);
 
         destino = 0;
@@ -67,14 +71,44 @@ int main(int argc, char *argv[])
         }
     }
 
-    printf("eof\n"); // debug
     fclose(archive);
 
     dijkstra(vertices, source);
-    for (int i = 0; i < vector_size(vertices); i++)
+
+    // quicksort vector de vertices
+    // cria outro vetor separado
+    // para que seja possível indexar o vértice pelo id no vetor de vertices original
+    Vector *ordenado = vector_construct();
+    for (int i = vector_size(vertices)-1; i >= 0; i--) // itera em ordem reversa para preservar a ordem original
     {
-        v = (Vertice *)vector_get(vertices, i);
-        printf("id: %d pai: %d dist_source: %.2f\n", vertice_get_id(v), vertice_get_id_pai(v), vertice_get_distancia_origem(v));
+        vector_push_back(ordenado, (Vertice *)vector_get(vertices, i));
+    }
+    vector_qsort(ordenado, cmp_vertice);
+
+    // for (int i = 0; i < vector_size(vertices); i++) // debug
+    // {
+    //     v = (Vertice *)vector_get(vertices, i);
+    //     printf("id: %d pai: %d dist_source: %.2f\n", vertice_get_id(v), vertice_get_id_pai(v), vertice_get_distancia_origem(v));
+    // }
+
+    // imprime os vertices
+    int id_pai;
+    float distancia;
+    for (int i = 0; i < vector_size(vertices); i++) // debug
+    {
+        v = (Vertice *)vector_get(ordenado, i);
+        distancia = vertice_get_distancia_origem(v);
+        printf("SHORTEST PATH TO node_%d: node_%d ", vertice_get_id(v), vertice_get_id(v));
+
+        do
+        {
+            id_pai = vertice_get_id_pai(v);
+            printf("<- node_%d ", id_pai);
+            v = (Vertice *)vector_get(vertices, id_pai);
+        }
+        while (id_pai != 0);
+
+        printf("(Distance: %.2f)\n", distancia);
     }
 
     // destroy
@@ -84,6 +118,7 @@ int main(int argc, char *argv[])
         vertice_destroy(v);
     }
     vector_destroy(vertices);
+    vector_destroy(ordenado);
 
     return 0;
 }
