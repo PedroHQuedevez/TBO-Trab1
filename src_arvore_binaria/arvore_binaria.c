@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "arvore_binaria.h"
 
+typedef struct No No;
 typedef struct No {
     Vertice *vertice;
     No *left;
@@ -35,6 +36,15 @@ void no_destroy_recursivo(No *n)
     no_destroy_recursivo(n->left);
     no_destroy_recursivo(n->right);
     free(n);
+}
+
+void node_print(No *n) // debug
+{
+    if (n == NULL) return;
+
+    no_destroy_recursivo(n->left);
+    printf("%.2f ", n->vertice->distancia_origem);
+    no_destroy_recursivo(n->right);
 }
 
 ArvoreBinaria *arvore_binaria_construct()
@@ -79,6 +89,8 @@ void arvore_binaria_push(ArvoreBinaria *ab, Vertice *v)
             }
         }
     }
+    node_print(ab->root); // debug
+    printf("\n"); // debug
 }
 
 void arvore_binaria_remove(ArvoreBinaria *ab, Vertice *v)
@@ -133,10 +145,11 @@ void arvore_binaria_remove(ArvoreBinaria *ab, Vertice *v)
         else pai->right = atual->right;
     }
 
-    // salva o vértice, destroi o nó e retorna o vértice
-    Vertice *v = atual->vertice;
+    // destroi o nó
     no_destroy(atual);
-    return v;
+
+    node_print(ab->root); // debug
+    printf("\n"); // debug
 }
 
 Vertice *arvore_binaria_pop_min(ArvoreBinaria *ab)
@@ -165,6 +178,10 @@ Vertice *arvore_binaria_pop_min(ArvoreBinaria *ab)
     // salva o vértice, destroi o nó e retorna o vértice
     Vertice *v = atual->vertice;
     no_destroy(atual);
+
+    node_print(ab->root); // debug
+    printf("\n"); // debug
+
     return v;
 }
 

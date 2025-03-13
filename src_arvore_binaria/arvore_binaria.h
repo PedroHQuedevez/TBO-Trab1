@@ -4,7 +4,7 @@
 #include "vector.h"
 #include "vertice.h"
 
-typedef struct ArvoreBinaria;
+typedef struct ArvoreBinaria ArvoreBinaria;
 
 ArvoreBinaria *arvore_binaria_construct();
 int arvore_binaria_vazia(ArvoreBinaria *ab);
