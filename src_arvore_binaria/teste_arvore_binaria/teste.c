@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 {
     ArvoreBinaria *ab = arvore_binaria_construct();
 
-    // 1
+    //  1
     // 0 2
     Vertice *um = vertice_construct(1);
     vertice_set_distancia_origem(um, 1.0);
@@ -23,15 +23,36 @@ int main(int argc, char *argv[])
     vertice_set_distancia_origem(dois, 2.0);
     arvore_binaria_push(ab, dois);
 
-    //
-    printf("min: %.2f\n", vertice_get_distancia_origem((Vertice *)arvore_binaria_pop_min(ab))); // 0.00
-    printf("min: %.2f\n", vertice_get_distancia_origem((Vertice *)arvore_binaria_pop_min(ab))); // 1.00
-    printf("min: %.2f\n", vertice_get_distancia_origem((Vertice *)arvore_binaria_pop_min(ab))); // 2.00
+    // 2
+    printf("0.00 %.2f\n", vertice_get_distancia_origem((Vertice *)arvore_binaria_pop_min(ab))); // 0.00
+    printf("1.00 %.2f\n", vertice_get_distancia_origem((Vertice *)arvore_binaria_pop_min(ab))); // 1.00
+
+    // 2
+    // 1 5
+    // 0       4   6
+    //           3
+    arvore_binaria_push(ab, um);
+    arvore_binaria_push(ab, zero);
+
+    Vertice *quatro = vertice_construct(4);
+    vertice_set_distancia_origem(quatro, 4.0);
+    arvore_binaria_push(ab, quatro);
+
+    Vertice *cinco = vertice_construct(5);
+    vertice_set_distancia_origem(cinco, 5.0);
+    arvore_binaria_push(ab, cinco);
+
+    Vertice *tres = vertice_construct(3);
+    vertice_set_distancia_origem(tres, 3.0);
+    arvore_binaria_push(ab, tres);
 
     // free
     vertice_destroy(um);
     vertice_destroy(zero);
     vertice_destroy(dois);
+    vertice_destroy(tres);
+    vertice_destroy(quatro);
+    vertice_destroy(cinco);
     arvore_binaria_destroy(ab);
 
     return 0;
