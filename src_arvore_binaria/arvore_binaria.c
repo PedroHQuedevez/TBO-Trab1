@@ -46,11 +46,13 @@ void node_print(No *n) // debug
 {
     if (n == NULL) return;
 
+    printf("(");
     node_print(n->left);
     // printf("%p || l: %p r: %p || %p ", n, n->left, n->right, n->vertice); // debug
-    printf("%.2f ", vertice_get_distancia_origem(n->vertice));
+    printf(" %.2f ", vertice_get_distancia_origem(n->vertice));
     // printf("|| l: %.2f r: %.2f\n", n->left == NULL ? -1 : vertice_get_distancia_origem(n->left->vertice), n->right == NULL ? -1 : vertice_get_distancia_origem(n->right->vertice));
     node_print(n->right);
+    printf(")");
 }
 
 ArvoreBinaria *arvore_binaria_construct()
