@@ -1,40 +1,44 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "dijkstra.h"
+#include <float.h>
+#include "arvore_binaria.h"
+#include "vector.h"
 
-void dijkstra(Vector *vertices, int source)
-{
-    // constroi o heap de não-visitados e insere o vértice inicial
-    Heap *nao_visitados = heap_construct();
-    heap_push(nao_visitados, (Vertice *)vector_get(vertices, source));
+void dijkstra(ArvoreBinaria *arvore, Vector *vertices, int origem){
+    int numero_de_vertices = vector_size(vertices);
 
-    // variáveis buffer
-    Vertice *origem, *destino;
-    float peso;
-    Vector *arestas;
-    Aresta *a;
-    int idx;
+    // Inicializa as distâncias
+    for (int i = 0; i < numero_de_vertices; i++) {
+        Vertice *v = (Vertice *)vector_get(vertices, i);
+        if (v->id == origem) {
+            vertice_set_distancia_origem(v, 0);
+        } else {
+            vertice_set_distancia_origem(v, FLT_MAX);
+        }
+        arvore_binaria_push(arvore, v);
+    }
 
-    while (heap_size(nao_visitados) > 0)
-    {
-        origem = heap_pop(nao_visitados);
-        arestas = vertice_get_arestas(origem);
+    // Processa os vértices
+    while (!arvore_binaria_vazia(arvore)) {
+        Vertice *vertice_atual = arvore_binaria_pop_min(arvore);
+        int indice_atual = vertice_atual->id;
 
-        for (int i = 0; i < vector_size(arestas); i++) {
-            a = (Aresta *)vector_get(arestas, i);
-            destino = (Vertice *)vector_get(vertices, aresta_get_destino(a));
-            peso = aresta_get_peso(a);
+        // Relaxamento das arestas
+        for (int i = 0; i < vector_size(vertice_atual->arestas); i++) {
+            Aresta *a = (Aresta *)vector_get(vertice_atual->arestas, i);
 
-            if (vertice_get_distancia_origem(origem) + peso < vertice_get_distancia_origem(destino))
-            {
-                vertice_set_id_pai(destino, vertice_get_id(origem));
-                vertice_set_distancia_origem(destino, vertice_get_distancia_origem(origem) + peso);
-
-                idx = heap_find(nao_visitados, destino);
-                if (idx >= 0) heapify_up(nao_visitados, idx);
-                else heap_push(nao_visitados, destino);
+            // ✅ Agora usamos o vetor auxiliar para acessar o vértice vizinho diretamente
+            Vertice *vizinho = (Vertice *)vector_get(vertices, a->destino);
+            
+            float nova_distancia = vertice_get_distancia_origem(vertice_atual) + a->peso;
+            if (nova_distancia < vertice_get_distancia_origem(vizinho)) {
+                vertice_set_distancia_origem(vizinho, nova_distancia);
+                vertice_set_id_pai(vizinho, vertice_atual->id);
+                
+                // ✅ Removemos e reinserimos o vértice atualizado na árvore binária
+                arvore_binaria_remove(arvore, vizinho);
+                arvore_binaria_push(arvore, vizinho);
             }
         }
     }
-    heap_destroy(nao_visitados);
 }

@@ -1,11 +1,9 @@
-#ifndef _DJIKSTRA_H
-#define _DJIKSTRA_H
+#ifndef _DIJKSTRA_H
+#define _DIJKSTRA_H
 
-#include "aresta.h"
 #include "arvore_binaria.h"
 #include "vector.h"
-#include "vertice.h"
 
-void dijkstra(Vector *vertices, int id_inicial);
+void dijkstra(ArvoreBinaria *arvore, Vector *vertices, int origem);
 
 #endif
