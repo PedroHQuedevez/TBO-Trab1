@@ -100,9 +100,9 @@ void arvore_binaria_push(ArvoreBinaria *ab, Vertice *v)
             }
         }
     }
-    printf("ab: "); // debug
-    node_print(ab->root); // debug
-    printf("\n"); // debug
+    //printf("ab: "); // debug
+    //node_print(ab->root); // debug
+    //printf("\n"); // debug
     // printf("arvore_binaria_push end\n"); // debug
 }
 
@@ -168,9 +168,9 @@ void arvore_binaria_remove(ArvoreBinaria *ab, Vertice *v)
     // destroi o nó
     no_destroy(atual);
 
-    printf("ab: "); // debug
-    node_print(ab->root); // debug
-    printf("\n"); // debug
+    //printf("ab: "); // debug
+    //node_print(ab->root); // debug
+    // printf("\n"); // debug
 
     // printf("arvore_binaria_remove end\n"); // debug
 }
@@ -211,9 +211,9 @@ Vertice *arvore_binaria_pop_min(ArvoreBinaria *ab)
     Vertice *v = atual->vertice;
     no_destroy(atual);
 
-    printf("ab: "); // debug
-    node_print(ab->root); // debug
-    printf("\n"); // debug
+    //printf("ab: "); // debug
+    //node_print(ab->root); // debug
+    //printf("\n"); // debug
 
     // printf("arvore_binaria_pop_min end\n"); // debug
     return v;
