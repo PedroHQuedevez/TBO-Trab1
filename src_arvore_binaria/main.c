@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "aresta.h"
 #include "dijkstra.h"
 #include "arvore_binaria.h"
@@ -9,6 +10,7 @@
 
 int main(int argc, char *argv[])
 {
+    clock_t inicio = clock();
     if (argc < 3)
     {
         printf("Error: precisa de um arquivo de entrada e um arquivo de saída.\n");
@@ -83,7 +85,12 @@ int main(int argc, char *argv[])
 
     // ✅ Executa o algoritmo de Dijkstra usando a árvore binária e o vetor de vértices
     dijkstra(arvore, vertices, origem);
-
+    Vector *ordenado = vector_construct();
+    for (int i = vector_size(vertices)-1; i >= 0; i--) // itera em ordem reversa para preservar a ordem original
+    {
+        vector_push_back(ordenado, (Vertice *)vector_get(vertices, i));
+    }
+    vector_qsort(ordenado, cmp_vertice);
     // Gerando a saída
     Vertice *v;
     int id_pai;
@@ -91,7 +98,7 @@ int main(int argc, char *argv[])
 
     for (int i = 0; i < vector_size(vertices); i++)
     {
-        v = (Vertice *)vector_get(vertices, i);
+        v = (Vertice *)vector_get(ordenado, i);
         distancia = vertice_get_distancia_origem(v);
 
         fprintf(arquivo_saida, "SHORTEST PATH TO node_%d: node_%d ", vertice_get_id(v), vertice_get_id(v));
@@ -113,7 +120,14 @@ int main(int argc, char *argv[])
         vertice_destroy((Vertice *)vector_get(vertices, i));
     }
     vector_destroy(vertices);
+    vector_destroy(ordenado);
     fclose(arquivo_saida);
 
+    clock_t fim = clock();
+
+    double tempo_execucao = (double)(fim - inicio) / CLOCKS_PER_SEC;
+
+    printf("Tempo de execução do algoritmo: %.6f segundos\n", tempo_execucao);
+    
     return 0;
 }

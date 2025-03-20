@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "aresta.h"
 #include "dijkstra.h"
 #include "vector.h"
@@ -8,6 +9,7 @@
 
 int main(int argc, char *argv[])
 {
+    clock_t inicio = clock();
     if (argc < 3)
     {
         printf("Error: precisa de um arquivo de entrada e um arquivo de saída.\n");
@@ -18,6 +20,14 @@ int main(int argc, char *argv[])
     if (archive == NULL)
     {
         printf("Error: file not found.\n");
+        exit(0);
+    }
+
+    FILE *arquivo_saida = fopen(argv[2], "w");
+    if (arquivo_saida == NULL)
+    {
+        printf("Error: não foi possível criar o arquivo de saída.\n");
+        fclose(archive);
         exit(0);
     }
 
@@ -91,17 +101,17 @@ int main(int argc, char *argv[])
     {
         v = (Vertice *)vector_get(ordenado, i);
         distancia = vertice_get_distancia_origem(v);
-        printf("SHORTEST PATH TO node_%d: node_%d ", vertice_get_id(v), vertice_get_id(v));
+        fprintf(arquivo_saida, "SHORTEST PATH TO node_%d: node_%d ", vertice_get_id(v), vertice_get_id(v));
 
         do
         {
             id_pai = vertice_get_id_pai(v);
-            printf("<- node_%d ", id_pai);
+            fprintf(arquivo_saida, "<- node_%d ", id_pai);
             v = (Vertice *)vector_get(vertices, id_pai);
         }
         while (id_pai != 0);
 
-        printf("(Distance: %.2f)\n", distancia);
+        fprintf(arquivo_saida, "(Distance: %.2f)\n", distancia);
     }
 
     // destroy
@@ -112,6 +122,13 @@ int main(int argc, char *argv[])
     }
     vector_destroy(vertices);
     vector_destroy(ordenado);
+    fclose(arquivo_saida);
+
+    clock_t fim = clock();
+
+    double tempo_execucao = (double)(fim - inicio) / CLOCKS_PER_SEC;
+
+    printf("Tempo de execução do algoritmo: %.6f segundos\n", tempo_execucao);
 
     return 0;
 }
