@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 
     // Criando estrutura dinâmica
     ArvoreBinaria *arvore = arvore_binaria_construct();
-    Vector *vertices = vector_construct(); // ✅ Criamos o vetor auxiliar
+    Vector *vertices = vector_construct();
 
     // Variáveis auxiliares
     Vertice *vertice;
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
         }
 
         arvore_binaria_push(arvore, vertice);
-        vector_push_back(vertices, vertice); // ✅ Adicionamos ao vetor auxiliar
+        vector_push_back(vertices, vertice);
 
         no_destino = 0;
         while (1)
@@ -83,10 +83,9 @@ int main(int argc, char *argv[])
 
     fclose(arquivo_entrada);
 
-    // ✅ Executa o algoritmo de Dijkstra usando a árvore binária e o vetor de vértices
     dijkstra(arvore, vertices, origem);
     Vector *ordenado = vector_construct();
-    for (int i = vector_size(vertices)-1; i >= 0; i--) // itera em ordem reversa para preservar a ordem original
+    for (int i = vector_size(vertices)-1; i >= 0; i--) 
     {
         vector_push_back(ordenado, (Vertice *)vector_get(vertices, i));
     }
@@ -114,7 +113,6 @@ int main(int argc, char *argv[])
         fprintf(arquivo_saida, "(Distance: %.2f)\n", distancia);
     }
 
-    // ✅ Liberação de memória
     arvore_binaria_destroy(arvore);
     for (int i = 0; i < vector_size(vertices); i++) {
         vertice_destroy((Vertice *)vector_get(vertices, i));

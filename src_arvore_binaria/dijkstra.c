@@ -26,16 +26,13 @@ void dijkstra(ArvoreBinaria *arvore, Vector *vertices, int origem){
         // Relaxamento das arestas
         for (int i = 0; i < vector_size(vertice_atual->arestas); i++) {
             Aresta *a = (Aresta *)vector_get(vertice_atual->arestas, i);
-
-            // ✅ Agora usamos o vetor auxiliar para acessar o vértice vizinho diretamente
             Vertice *vizinho = (Vertice *)vector_get(vertices, a->destino);
-            
             float nova_distancia = vertice_get_distancia_origem(vertice_atual) + a->peso;
+
             if (nova_distancia < vertice_get_distancia_origem(vizinho)) {
                 vertice_set_distancia_origem(vizinho, nova_distancia);
                 vertice_set_id_pai(vizinho, vertice_atual->id);
                 
-                // ✅ Removemos e reinserimos o vértice atualizado na árvore binária
                 arvore_binaria_remove(arvore, vizinho);
                 arvore_binaria_push(arvore, vizinho);
             }
