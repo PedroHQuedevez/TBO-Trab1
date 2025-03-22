@@ -1,8 +1,11 @@
-all:
-	gcc main.c aresta.c arvore_binaria.c dijkstra.c vector.c vertice.c -o trab1
+heap:
+	gcc src_heap/main.c src_heap/aresta.c src_heap/dijkstra.c src_heap/heap.c src_heap/vector.c src_heap/vertice.c -o trab1
+
+tree: 
+	gcc src_arvore_binaria/main.c src_arvore_binaria/aresta.c src_arvore_binaria/arvore_binaria.c src_arvore_binaria/dijkstra.c src_arvore_binaria/vector.c src_arvore_binaria/vertice.c -o trab1
 
 run_muito_pequeno_1:
-	./trab1 ../casos_teste_v3/caso_teste_muito_pequeno_1.txt ../casos_teste_v3/saida.txt
+	./trab1 casos_teste_v3/caso_teste_muito_pequeno_1.txt casos_teste_v3/saida.txt
 
 valgrind_muito_pequeno_1:
 	valgrind --leak-check=full ./trab1 ../casos_teste_v3/caso_teste_muito_pequeno_1.txt ../casos_teste_v3/saida.txt

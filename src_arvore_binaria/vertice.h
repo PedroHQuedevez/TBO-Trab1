@@ -8,7 +8,7 @@ typedef struct {
     int id;
     int id_pai;
     float distancia_origem;
-    Vector *arestas; // ✅ Lista de arestas dentro do vértice
+    Vector *arestas;
 } Vertice;
 
 Vertice *vertice_construct(int id);
